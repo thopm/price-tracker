@@ -1,8 +1,36 @@
 
 console.log("Price Tracker background.js запущен");
+chrome.alarms.clear("priceCheck");
 
 const API_URL = "http://localhost:8080/api";
 const CHECK_INTERVAL_MINUTES = 60;
+
+// const NATIVE_HOST = "com.pricetracker.host";
+
+// function connectToHost() {
+//     const port = chrome.runtime.connectNative(NATIVE_HOST);
+
+//     port.onMessage.addListener((message) => {
+//         console.log("Ответ Native Host:", message);
+
+//         if (message.status === "READY") {
+//             checkAllProducts();
+//         }
+
+//         if (message.status === "ERROR") {
+//             console.error(message.message);
+//         }
+//     });
+
+//     port.onDisconnect.addListener(() => {
+//         console.log(
+//             "Native Host отключён:",
+//             chrome.runtime.lastError?.message
+//         );
+//     });
+
+//     port.postMessage({ action: "PING" });
+// }
 
 let isChecking = false;
 
@@ -17,26 +45,27 @@ async function setupAlarm() {
     }
 }
 
-// Установка расширения или обновление
-chrome.runtime.onInstalled.addListener(() => {
-    setupAlarm();
-});
+// // Установка расширения или обновление
+// chrome.runtime.onInstalled.addListener(() => {
+//     setupAlarm();
+// });
 
 // Запуск браузера
-chrome.runtime.onStartup.addListener(async () => {
-    console.log("Chrome запущен. Начинаю проверку цен...");
+// chrome.runtime.onStartup.addListener(async () => {
+//     console.log("Chrome запущен.");
 
-    await setupAlarm();
-    checkAllProducts();
-});
+//     connectToHost();
+
+//     await setupAlarm();
+// });
 
 // Проверка по таймеру
-chrome.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === "priceCheck") {
-        console.log("Сработал таймер проверки цен");
-        checkAllProducts();
-    }
-});
+// chrome.alarms.onAlarm.addListener((alarm) => {
+//     if (alarm.name === "priceCheck") {
+//         console.log("Сработал таймер проверки цен");
+//         checkAllProducts();
+//     }
+// });
 
 // Ожидание загрузки страницы
 async function waitForTabLoad(tabId) {
